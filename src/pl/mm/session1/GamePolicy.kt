@@ -28,8 +28,8 @@ class TicTacToePolicy : GamePolicy {
         if (canStrikeLine(board.squaresWith(inactivePlayerPiece()))) {
             return Optional.of("Player ${inactivePlayerPiece()} won")
         }
-        if (board.isFull) {
-            return Optional.of("Game draw")
+        if (board.isFull()) {
+            return Optional.of("Game drawn")
         }
         return Optional.empty()
     }

@@ -31,7 +31,7 @@ data class Board(val columns: Int, val rows: Int) {
         }.flatten().filter { it.second.piece() == piece }.map {it.first}
     }
 
-    val isFull = squaresWith(EmptySquare.piece()).isEmpty()
+    fun isFull() = squaresWith(EmptySquare.piece()).isEmpty()
 
 }
 
