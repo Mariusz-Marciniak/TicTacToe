@@ -7,7 +7,7 @@ interface GamePolicy {
     fun setup()
     fun checkWinCondition(): Optional<String>
     fun nextPlayer()
-    fun verifyIsMoveValid(row: String, col: String): String?
+    fun verifyIsMoveValid(coords: Coords): String?
 }
 
 class TicTacToePolicy : GamePolicy {
@@ -62,21 +62,15 @@ class TicTacToePolicy : GamePolicy {
 
     private fun inactivePlayerPiece() = if (activePlayerPiece === playerTwoPiece) playerOnePiece else playerTwoPiece
 
-    override fun verifyIsMoveValid(row: String, col: String): String? {
-        try {
-            val colV = Integer.parseInt(col) - 1
-            val rowV = Integer.parseInt(row) - 1
-            return if (colV < 0 || rowV < 0) {
+    override fun verifyIsMoveValid(coords: Coords): String? {
+            return if (coords.col < 0 || coords.row < 0) {
                 "Incorrect values"
-            } else if (board.get(Coords(rowV, colV)).isPresent) {
+            } else if (board.get(coords).isPresent) {
                 "Filed occupied"
             } else {
-                board.put(activePlayerPiece, Coords(rowV, colV))
+                board.put(activePlayerPiece, coords)
                 null
             }
-        } catch (e: NumberFormatException) {
-            return "Given value is not a number"
-        }
     }
 
 
