@@ -7,7 +7,7 @@ interface GamePolicy {
     fun setup()
     fun checkWinCondition(): Optional<String>
     fun nextPlayer()
-    fun verifyIsMoveValid(col: String, row: String): String?
+    fun verifyIsMoveValid(row: String, col: String): String?
 }
 
 class TicTacToePolicy : GamePolicy {
@@ -40,7 +40,7 @@ class TicTacToePolicy : GamePolicy {
             var secondDiagonal = true
             for(i in 0 until  lineElements) {
                 firstDiagonal = firstDiagonal && squares.contains(Coords(i,i))
-                secondDiagonal = secondDiagonal && squares.contains(Coords(i,lineElements - i))
+                secondDiagonal = secondDiagonal && squares.contains(Coords(i,lineElements -1 - i))
             }
             return firstDiagonal || secondDiagonal
         }
