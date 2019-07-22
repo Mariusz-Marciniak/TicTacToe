@@ -1,13 +1,14 @@
 package pl.mm.session1
 
+import pl.mm.session1.epsilonGreedyAgent.EpsilonGreedyAgent
 import pl.mm.session1.humanAgent.HumanAgent
 import pl.mm.session1.randomAgent.RandomAgent
 
 
 class TicTacToe {
     private val policy = TicTacToePolicy()
-    private val playerOneAgent = HumanAgent
-    private val playerTwoAgent = RandomAgent
+    private val playerOneAgent = RandomAgent
+    private val playerTwoAgent = HumanAgent
 
     fun gameLoop() {
         mainLoop@ while (true) {
@@ -45,9 +46,9 @@ class TicTacToe {
 
     private fun chooseMove(): Coords {
         return if(policy.activePlayerPiece === policy.playerOnePiece) {
-            playerOneAgent.makeMove(policy.board)
+            playerOneAgent.makeMove(policy.activePlayerPiece, policy.board)
         } else {
-            playerTwoAgent.makeMove(policy.board)
+            playerTwoAgent.makeMove(policy.activePlayerPiece, policy.board)
         }
     }
 }

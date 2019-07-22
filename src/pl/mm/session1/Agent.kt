@@ -1,5 +1,5 @@
 package pl.mm.session1
 
 interface Agent {
-    fun makeMove(board: Board): Coords
+    fun makeMove(piece: Piece, board: Board): Coords
 }

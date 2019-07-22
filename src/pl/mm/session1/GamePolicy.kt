@@ -12,9 +12,10 @@ interface GamePolicy {
 
 class TicTacToePolicy : GamePolicy {
     val lineElements = 3
-    val board = Board(lineElements, lineElements)
     val playerOnePiece = "X"
     val playerTwoPiece = "O"
+
+    var board = Board(lineElements, lineElements)
     var activePlayerPiece: Piece = playerOnePiece
 
     override fun setup() {
@@ -23,13 +24,13 @@ class TicTacToePolicy : GamePolicy {
 
     override fun checkWinCondition(): Optional<String> {
         if (canStrikeLine(board.squaresWith(activePlayerPiece))) {
-            return Optional.of("Player $activePlayerPiece won")
+            return Optional.of("Player $activePlayerPiece has won")
         }
         if (canStrikeLine(board.squaresWith(inactivePlayerPiece()))) {
-            return Optional.of("Player ${inactivePlayerPiece()} won")
+            return Optional.of("Player ${inactivePlayerPiece()} has won")
         }
         if (board.isFull()) {
-            return Optional.of("Game drawn")
+            return Optional.of("Game is drawn")
         }
         return Optional.empty()
     }
@@ -68,7 +69,7 @@ class TicTacToePolicy : GamePolicy {
             } else if (board.get(coords).isPresent) {
                 "Filed occupied"
             } else {
-                board.put(activePlayerPiece, coords)
+                board = board.put(activePlayerPiece, coords)
                 null
             }
     }
