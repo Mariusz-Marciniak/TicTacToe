@@ -1,17 +1,17 @@
 package pl.mm.session1.humanAgent
 
-import pl.mm.session1.Agent
-import pl.mm.session1.Board
-import pl.mm.session1.Coords
-import pl.mm.session1.Piece
+import pl.mm.session1.*
 import java.lang.IndexOutOfBoundsException
 
-object HumanAgent : Agent {
+class HumanAgent(piece: Piece) : Agent<TicTacToeEnvironment>(piece) {
 
-    override fun makeMove(piece: Piece, board: Board): Coords {
+    override fun gameFinished(env: TicTacToeEnvironment) {
+    }
+
+    override fun makeMove(env: TicTacToeEnvironment): Coords {
         while (true) {
             try {
-                print("Choose row and column to set $piece e.g. 2,3: ")
+                print("Choose row and column to set ${env.activePlayerPiece} e.g. 2,3: ")
                 val (row, col) = readLine()!!.split(',')
                 val colV = Integer.parseInt(col) - 1
                 val rowV = Integer.parseInt(row) - 1

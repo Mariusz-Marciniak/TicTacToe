@@ -1,24 +1,26 @@
 package pl.mm.session1
 
-import java.util.*
-
 interface GamePolicy<T : Environment> {
-    fun checkWinCondition(env: T): Optional<String>
+    fun checkWinCondition(env: T): GameResult
     fun verifyIsMoveValid(env: T, move: Coords): String?
 }
 
+enum class GameResult {
+    PLAYER_X_WON, PLAYER_O_WON, DRAWN, NOT_DECIDED
+}
+
 class TicTacToePolicy : GamePolicy<TicTacToeEnvironment> {
-    override fun checkWinCondition(env: TicTacToeEnvironment): Optional<String> {
-        if (canStrikeLine(env.board, env.activePlayerPiece)) {
-            return Optional.of("Player $env.activePlayerPiece has won")
+    override fun checkWinCondition(env: TicTacToeEnvironment): GameResult {
+        if (canStrikeLine(env.board, env.playerX)) {
+            return GameResult.PLAYER_X_WON
         }
-        if (canStrikeLine(env.board, env.inactivePlayerPiece())) {
-            return Optional.of("Player ${env.inactivePlayerPiece()} has won")
+        if (canStrikeLine(env.board, env.playerO)) {
+            return GameResult.PLAYER_O_WON
         }
         if (env.board.isFull()) {
-            return Optional.of("Game is drawn")
+            return GameResult.DRAWN
         }
-        return Optional.empty()
+        return GameResult.NOT_DECIDED
     }
 
     private fun canStrikeLine(board: Board, playerPiece: Piece): Boolean {

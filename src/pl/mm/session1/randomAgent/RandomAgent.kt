@@ -3,10 +3,12 @@ package pl.mm.session1.randomAgent
 import pl.mm.session1.*
 import kotlin.random.Random
 
-object RandomAgent : Agent {
+class RandomAgent(piece: Piece) : Agent<TicTacToeEnvironment>(piece) {
+    override fun gameFinished(env: TicTacToeEnvironment) {
+    }
 
-    override fun makeMove(piece: Piece, board: Board): Coords {
-        val emptySquares = board.squaresWith(EmptySquare.piece())
+    override fun makeMove(env: TicTacToeEnvironment): Coords {
+        val emptySquares = env.board.squaresWith(EmptySquare.piece())
         return emptySquares[Random.Default.nextInt(emptySquares.size)]
     }
 

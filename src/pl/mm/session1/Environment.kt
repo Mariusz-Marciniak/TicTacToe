@@ -9,15 +9,16 @@ interface Environment {
 
 class TicTacToeEnvironment: Environment {
     val lineElements = 3
-    val playerOnePiece = "X"
-    val playerTwoPiece = "O"
-    var board = Board(lineElements, lineElements)
-    var activePlayerPiece: Piece = playerOnePiece
+    val playerX = "X"
+    val playerO = "O"
+    lateinit var board: Board
+    lateinit var activePlayerPiece: Piece
 
-    fun inactivePlayerPiece() = if (activePlayerPiece === playerTwoPiece) playerOnePiece else playerTwoPiece
+    fun inactivePlayerPiece() = if (activePlayerPiece === playerO) playerX else playerO
 
     override fun reset() {
-        activePlayerPiece = if (Random(System.currentTimeMillis()).nextBoolean()) playerOnePiece else playerTwoPiece
+        activePlayerPiece = if (Random(System.currentTimeMillis()).nextBoolean()) playerX else playerO
+        board = Board(lineElements, lineElements)
     }
     override fun nextPlayer() {
         activePlayerPiece = inactivePlayerPiece()
