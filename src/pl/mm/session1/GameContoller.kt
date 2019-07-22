@@ -14,15 +14,15 @@ class TicTacToe {
     private val statistics = Statistics(amountOfSessions)
 
     fun matchSession() {
-        for(session in (0 until amountOfSessions)) {
+        for (session in (0 until amountOfSessions)) {
             statistics.announceSession(session)
-            println("Session ${session+1}:")
+            println("Session ${session + 1}:")
             env.reset()
             statistics.startingPlayer(env.activePlayerPiece)
             gameLoop()
             println()
             println()
-            }
+        }
         println(statistics)
     }
 
@@ -86,7 +86,7 @@ class TicTacToe {
 class Statistics(amountOfSessions: Int) {
     private val amountOfSections = 10
     private val sessionsPerSection = amountOfSessions / amountOfSections
-    private val sectionStatistics = MutableList(amountOfSections){SectionStatistics(0,0,0,0, 0)}
+    private val sectionStatistics = MutableList(amountOfSections) { SectionStatistics(0, 0, 0, 0, 0) }
     private var currentSection = 0
 
     fun announceSession(sessionNumber: Int) {
@@ -94,14 +94,14 @@ class Statistics(amountOfSessions: Int) {
     }
 
     fun startingPlayer(activePlayerPiece: Piece) {
-        when(activePlayerPiece) {
+        when (activePlayerPiece) {
             "X" -> sectionStatistics[currentSection].startingX++
             "O" -> sectionStatistics[currentSection].startingO++
         }
     }
 
     fun recordResult(result: GameResult) {
-        when(result) {
+        when (result) {
             GameResult.PLAYER_X_WON -> sectionStatistics[currentSection].wonX++
             GameResult.PLAYER_O_WON -> sectionStatistics[currentSection].wonO++
             GameResult.DRAWN -> sectionStatistics[currentSection].draw++
@@ -113,9 +113,9 @@ class Statistics(amountOfSessions: Int) {
 | section | started X | started O | won X | won O | draw |  
 |________________________________________________________|
         """
-        for(i in (0 until amountOfSections)) {
+        for (i in (0 until amountOfSections)) {
             header += """
-|   ${i+1}    |    ${sectionStatistics[i].startingX}     |   ${sectionStatistics[i].startingO}      |  ${sectionStatistics[i].wonX}   |  ${sectionStatistics[i].wonO}   | ${sectionStatistics[i].draw}   |"""
+|   ${i + 1}    |    ${sectionStatistics[i].startingX}     |   ${sectionStatistics[i].startingO}      |  ${sectionStatistics[i].wonX}   |  ${sectionStatistics[i].wonO}   | ${sectionStatistics[i].draw}   |"""
         }
         return header
     }
