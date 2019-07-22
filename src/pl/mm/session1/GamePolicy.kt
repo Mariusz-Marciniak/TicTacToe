@@ -1,41 +1,29 @@
 package pl.mm.session1
 
 import java.util.*
-import kotlin.random.Random
 
-interface GamePolicy {
-    fun setup()
-    fun checkWinCondition(): Optional<String>
-    fun nextPlayer()
-    fun verifyIsMoveValid(coords: Coords): String?
+interface GamePolicy<T : Environment> {
+    fun checkWinCondition(env: T): Optional<String>
+    fun verifyIsMoveValid(env: T, move: Coords): String?
 }
 
-class TicTacToePolicy : GamePolicy {
-    val lineElements = 3
-    val playerOnePiece = "X"
-    val playerTwoPiece = "O"
-
-    var board = Board(lineElements, lineElements)
-    var activePlayerPiece: Piece = playerOnePiece
-
-    override fun setup() {
-        activePlayerPiece = if (Random(System.currentTimeMillis()).nextBoolean()) playerOnePiece else playerTwoPiece
-    }
-
-    override fun checkWinCondition(): Optional<String> {
-        if (canStrikeLine(board.squaresWith(activePlayerPiece))) {
-            return Optional.of("Player $activePlayerPiece has won")
+class TicTacToePolicy : GamePolicy<TicTacToeEnvironment> {
+    override fun checkWinCondition(env: TicTacToeEnvironment): Optional<String> {
+        if (canStrikeLine(env.board, env.activePlayerPiece)) {
+            return Optional.of("Player $env.activePlayerPiece has won")
         }
-        if (canStrikeLine(board.squaresWith(inactivePlayerPiece()))) {
-            return Optional.of("Player ${inactivePlayerPiece()} has won")
+        if (canStrikeLine(env.board, env.inactivePlayerPiece())) {
+            return Optional.of("Player ${env.inactivePlayerPiece()} has won")
         }
-        if (board.isFull()) {
+        if (env.board.isFull()) {
             return Optional.of("Game is drawn")
         }
         return Optional.empty()
     }
 
-    private fun canStrikeLine(squares: List<Coords>): Boolean {
+    private fun canStrikeLine(board: Board, playerPiece: Piece): Boolean {
+        val squares = board.squaresWith(playerPiece)
+        val lineElements = board.columns
         fun diagonalLine() : Boolean {
             var firstDiagonal = true
             var secondDiagonal = true
@@ -57,19 +45,12 @@ class TicTacToePolicy : GamePolicy {
         }
     }
 
-    override fun nextPlayer() {
-        activePlayerPiece = inactivePlayerPiece()
-    }
-
-    private fun inactivePlayerPiece() = if (activePlayerPiece === playerTwoPiece) playerOnePiece else playerTwoPiece
-
-    override fun verifyIsMoveValid(coords: Coords): String? {
-            return if (coords.col < 0 || coords.row < 0) {
+    override fun verifyIsMoveValid(env: TicTacToeEnvironment, move: Coords): String? {
+            return if (move.col < 0 || move.row < 0) {
                 "Incorrect values"
-            } else if (board.get(coords).isPresent) {
+            } else if (env.board.get(move).isPresent) {
                 "Filed occupied"
             } else {
-                board = board.put(activePlayerPiece, coords)
                 null
             }
     }

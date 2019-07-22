@@ -1,19 +1,19 @@
 package pl.mm.session1
 
-import pl.mm.session1.epsilonGreedyAgent.EpsilonGreedyAgent
 import pl.mm.session1.humanAgent.HumanAgent
 import pl.mm.session1.randomAgent.RandomAgent
 
 
 class TicTacToe {
     private val policy = TicTacToePolicy()
+    private val env = TicTacToeEnvironment()
     private val playerOneAgent = RandomAgent
     private val playerTwoAgent = HumanAgent
 
     fun gameLoop() {
         mainLoop@ while (true) {
-            policy.board.printBoard()
-            val winCond = policy.checkWinCondition()
+            env.board.printBoard()
+            val winCond = policy.checkWinCondition(env)
             if (winCond.isPresent) {
                 println(winCond.get())
                 break@mainLoop
@@ -25,15 +25,17 @@ class TicTacToe {
     }
 
     private fun changeActivePlayer() {
-        policy.nextPlayer()
+        env.nextPlayer()
     }
 
     private fun activePlayerMove() {
         activePlayerLoop@ while(true) {
-            println("Player ${policy.activePlayerPiece} move")
+            println("Player ${env.activePlayerPiece} move")
             try {
-                val moveInvalidError = policy.verifyIsMoveValid(chooseMove())
+                val move = chooseMove()
+                val moveInvalidError = policy.verifyIsMoveValid(env, move)
                 if (moveInvalidError == null) {
+                    env.makeMove(move)
                     break@activePlayerLoop
                 } else {
                     println("Invalid move: $moveInvalidError")
@@ -45,10 +47,10 @@ class TicTacToe {
     }
 
     private fun chooseMove(): Coords {
-        return if(policy.activePlayerPiece === policy.playerOnePiece) {
-            playerOneAgent.makeMove(policy.activePlayerPiece, policy.board)
+        return if(env.activePlayerPiece === env.playerOnePiece) {
+            playerOneAgent.makeMove(env.activePlayerPiece, env.board)
         } else {
-            playerTwoAgent.makeMove(policy.activePlayerPiece, policy.board)
+            playerTwoAgent.makeMove(env.activePlayerPiece, env.board)
         }
     }
 }
