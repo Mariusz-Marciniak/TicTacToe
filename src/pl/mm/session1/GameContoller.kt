@@ -6,10 +6,11 @@ import pl.mm.session1.randomAgent.RandomAgent
 
 
 class TicTacToe {
-    private val amountOfSessions = 1000
+    private val amountOfSessions = 5000
     private val policy = TicTacToePolicy()
     private val env = TicTacToeEnvironment()
-    private val playerOneAgent = EpsilonGreedyAgent(env.playerX, policy, 0.5, 0.1, false)
+    private var playerOneAgent: Agent<TicTacToeEnvironment> =
+            RandomAgent(env.playerX, policy, true)
     private val playerTwoAgent = EpsilonGreedyAgent(env.playerO, policy)
     private val statistics = Statistics(amountOfSessions)
 
@@ -20,6 +21,8 @@ class TicTacToe {
             env.reset()
             statistics.startingPlayer(env.activePlayerPiece)
             gameLoop()
+//            if(session > 9990)
+//                playerOneAgent = HumanAgent(env.playerX)
             println()
             println()
         }

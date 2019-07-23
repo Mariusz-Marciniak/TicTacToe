@@ -31,7 +31,7 @@ class EpsilonGreedyAgent(piece: Piece,
     private fun updateEpsilon() {
         if(updateEpsilon) {
             session = session + 1.0
-            epsilon = 0.01 + (1.0 - 0.01) * Math.exp(-0.005 * session)
+            epsilon = 0.01 + (1.0 - 0.01) * Math.exp(-0.0005 * session)
             println("for session $session epsilon is $epsilon")
         }
     }
